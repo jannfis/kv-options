@@ -13,7 +13,7 @@ go get github.com/jannfis/kv-options
 Import in your Go code:
 
 ```go
-import github.com/jannfis/kv-options/pkg/options
+import "github.com/jannfis/kv-options/pkg/options"
 ```
 
 ## License
@@ -73,12 +73,12 @@ You can specify a default value, which will be returned if the requested option 
 If the default is given as `nil`, the option is expected to be set (i.e. mandatory):
 
 ```go
-bv, err := options.Bool("Foo", nil)
+bval, err := opts.Bool("Foo", nil)
 if err != nil {
     // handle error
 }
 
-sv, err := options.String("Bar", nil)
+sval, err := opts.String("Bar", nil)
 if err != nil {
     // handle error
 }
@@ -86,18 +86,25 @@ if err != nil {
 
 In the previous example, `Bool` will return an error if the requested option is either not set or of a different type.
 
-If you provide a default value and `Bar` was never defined, `bv` will be `true` and `err` will be `nil`:
+If you provide a default value and `Foo` was never defined, `bval` will be `true` and `err` will be `nil`:
 
 ```go
-bv, err := options.Bool("Bar", options.Ptr(true))
+bval, err := opts.Bool("Bar", options.Ptr(true))
 if err != nil {
     // handle error
 }
 
-sv, err := options.String("Foo", options.Ptr("bar"))
+sval, err := opts.String("Foo", options.Ptr("bar"))
 if err != nil {
     // handle error
 }
 ```
 
 Note that the default value will only be returned by `Bool` if the option has not been defined. If 
+
+If you're not interested in error handling, you can use the getters with a `Must` prefix and provide a mandatory default value to be returned when the option is not set, or is of a different type:
+
+```go
+bval := opts.MustBool("Foo", true)
+sval := opts.MustString("Bar", "bar")
+```
