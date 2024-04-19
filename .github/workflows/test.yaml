@@ -1,0 +1,21 @@
+name: Test codebase
+
+on: [push, pull_request]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    name: Run unit tests
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Run unit tests
+      run: make test
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: jannfis/kv-options
+        files: ./test/out/coverage.txt
+        verbose: true
+
